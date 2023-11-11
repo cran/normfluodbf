@@ -1,3 +1,7 @@
+# normfluodbf 1.5.0
+
+# normfluodbf 1.4.3.9000 - Latest Pre-release
+
 # normfluodbf 1.4.3
 
 # normfluodbf 1.4.2
@@ -14,6 +18,5 @@
 
 # normfluodbf 1.0
 
--   First version of the package. Been an experience working on this.
+-   Minor update to the package with functionality for DAT files.
 
--   Initial CRAN submission.
