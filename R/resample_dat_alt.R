@@ -18,15 +18,16 @@
 #'
 #' @examples fpath <- system.file("extdata", "dat_1.dat", package = "normfluodbf", mustWork = TRUE)
 #' dat_df <- read.table(file=fpath)
-#' nocomma_dat <- clean_odd_cc(dat_df)
-#' col_1 <- nocomma_dat[,1]
-#' col_1 <- as.data.frame(col_1)
+#' nocomma_dat <- clean_odddat_optimus(dat_df)
+#' col_1 <- nocomma_dat[1]
 #' samples_delineated <- resample_dat_alt(col_1, tnp=3, cycles=40)
 
 resample_dat_alt <- function(df, tnp, cycles){
 
-  k <- c(1:ncol(df))
-  type_size <- c(1:ncol(df))
+  suppressWarnings({
+
+  k <- c(1:tnp)
+  type_size <- c(1:tnp)
 
   resulting_df <- data.frame()
   for (i in 1:(nrow(df)/tnp)){
@@ -39,7 +40,11 @@ resample_dat_alt <- function(df, tnp, cycles){
     k <- k + increment_k
 
     colnames(resulting_df) <- NULL
+
   }
   return(resulting_df)
+
+  })
+
 }
 
