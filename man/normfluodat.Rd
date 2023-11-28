@@ -12,7 +12,11 @@ normfluodat(
   cols_used = NULL,
   user_specific_labels = NULL,
   read_direction = NULL,
-  norm_scale = NULL
+  norm_scale = NULL,
+  interval = NULL,
+  first_end = NULL,
+  pause_duration = NULL,
+  end_time = NULL
 )
 }
 \arguments{
@@ -35,6 +39,14 @@ if the user intends to have a final data frame with samples arranged as clusters
 
 \item{norm_scale}{This parameter takes sub-parameters: 'raw’ , hundred’ , 'one’ , 'z-score' , or 'decimal’ ,
 which denotes the normalization type or scale; Initialized as NULL.}
+
+\item{interval}{The time interval chosen for the assay often in seconds.}
+
+\item{first_end}{The end time of the initial run, often the pause for the introduction of a new substance. This can be the cycle number chosen for the initial stop.}
+
+\item{pause_duration}{The time between the first end (pause) and resumption of the assay.}
+
+\item{end_time}{The final end time of the assay.}
 }
 \value{
 A normalized data frame with an appended "Cycle_Number" attribute. The “Cycle_Number” attribute is the X-variable.
@@ -52,11 +64,11 @@ It is assumed that the user has the 3 baseline parameters to get this function w
 Users must double-check attribute names to ensure they end up with accurate results.
 }
 \examples{
-fpath <- system.file("extdata", "dat_1.dat", package = "normfluodbf", mustWork = TRUE)
+fpath <- system.file("extdata", "dat_4.dat", package = "normfluodbf", mustWork = TRUE)
 normalized_fluo_dat <- normfluodat(dat=fpath, tnp = 3, cycles = 40)
 }
 \seealso{
-\code{\link[=normfluordat]{normfluordat()}}
+\code{\link[=normfluodatlite]{normfluodatlite()}}
 }
 \author{
 Tingwei Adeck

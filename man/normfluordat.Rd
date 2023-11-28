@@ -10,7 +10,9 @@ normfluordat(
   cycles,
   rows_used = NULL,
   cols_used = NULL,
-  user_specific_labels = NULL
+  user_specific_labels = NULL,
+  read_direction = NULL,
+  na_omit = NULL
 )
 }
 \arguments{
@@ -25,6 +27,13 @@ normfluordat(
 \item{cols_used}{A numeric vector of the columns used; cu = c(1,2,3).}
 
 \item{user_specific_labels}{A character vector manually prepared by the user to denote the wells used on the microplate reader; usl = c('A1','B1','C1').}
+
+\item{read_direction}{A string input with two choices, “vertical” or “horizontal.”
+The user indicates “vertical” if the user intends to have a final data frame
+with samples arranged as sample type triplets (A1, B1, C1, A1, B1, C1)
+OR “horizontal” if the user intends to have a final data frame with samples.}
+
+\item{na_omit}{Takes a string "yes" OR "no".}
 }
 \value{
 A normalized data frame with an appended "Cycle_Number" attribute. The “Cycle_Number” attribute is the X-variable.
@@ -40,6 +49,7 @@ and then appends an attribute called “Cycle_Number” to the normalized data f
 This function has less optimized space and time complexities than @seealso \code{\link[=normfluodat]{normfluodat()}}.
 In real-time the difference in optimization is not noticeable.
 This function also takes less parameters than the more optimized version of the function.
+Use @seealso \code{\link[=normfluodat]{normfluodat()}} for better approximation of attribute names.
 }
 \examples{
 fpath <- system.file("extdata", "dat_1.dat", package = "normfluodbf", mustWork = TRUE)

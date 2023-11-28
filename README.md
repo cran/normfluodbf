@@ -1,9 +1,9 @@
 Tingwei Adeck
-November 13, 2023
+November 26, 2023
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# [![](https://img.shields.io/badge/normfluodbf-1.5.1-blue.svg)](https://github.com/AlphaPrime7/normfluodbf) <img src="man/figures/logo.png" align="right" width="180"/>
+# [![](https://img.shields.io/badge/normfluodbf-1.5.2-blue.svg)](https://github.com/AlphaPrime7/normfluodbf) <img src="man/figures/logo.png" align="right" width="180"/>
 
 [![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com/AlphaPrime7/normfluodbf)
 [![Demandez moi n’importe quoi
@@ -16,7 +16,7 @@ status](https://www.repostatus.org/badges/latest/concept.svg)](https://github.co
 [![Project
 Status](https://www.repostatus.org/badges/latest/active.svg)](https://github.com/AlphaPrime7/normfluodbf/commits)
 [![Project
-Status](https://www.repostatus.org/badges/latest/wip.svg)](https://github.com/AlphaPrime7/normfluodbf_ShinyApp/graphs/contributors)
+Status](https://img.shields.io/badge/repo%20status-mature-fg79b4.svg)](https://github.com/AlphaPrime7/normfluodbf_ShinyApp/graphs/contributors)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![PRs
 Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
@@ -38,6 +38,14 @@ Badges](https://img.shields.io/badge/badges-awesome-green.svg)](https://github.c
 
 [![](https://img.shields.io/badge/follow%20me%20on-LinkedIn-green.svg)](https://www.linkedin.com/in/tingwei-adeck)
 [![](https://img.shields.io/badge/follow%20me%20on-GitHub-green.svg)](https://github.com/AlphaPrime7)
+
+# ⏩ 📽️ Quick start
+
+For quick starters, please visit the
+[`{video tutorial}`](https://alphaprime7.github.io/normfluodbf/video.html)
+for an illustration on how to effectively use the package. The video
+tutorial only covers DAT files based on the assumption that MOST users
+will be interested in using the package for DAT files.
 
 # ✍️ Introduction
 
@@ -98,17 +106,17 @@ library(normfluodbf)
   when possible.
 
 ``` r
-install.packages("normfluodbf_1.5.1.tar.gz", repos = NULL, type = "source")
+install.packages("normfluodbf_1.5.2.tar.gz", repos = NULL, type = "source")
 ```
 
 ``` r
 library(devtools)
-install_local("normfluodbf_1.5.1.tar.gz")
+install_local("normfluodbf_1.5.2.tar.gz")
 ```
 
 ``` r
 library(remotes)
-remotes::install_local("normfluodbf_1.5.1.tar.gz")
+remotes::install_local("normfluodbf_1.5.2.tar.gz")
 ```
 
 # 🕵️ Use Scenarios
@@ -136,6 +144,7 @@ normalized_data <- norm_tidy_dbf(liposomes_214, norm_scale = 'hundred')
 ``` r
 library(normfluodbf)
 liposomes_214 <- system.file("extdata", "liposomes_214.dbf", package = "normfluodbf")
+normalized_data <- normfluordbf(liposomes_214)
 normalized_data <- normfluordbf(liposomes_214)
 ```
 
@@ -172,7 +181,7 @@ normalized_datazt <- normfluordbf(liposomes_214, norm_scale = 'z-score', transfo
 
 ### Advanced Function
 
-- This methodology was provided as a minor update in normfluodbf 1.5.1.
+- This methodology was provided as a minor update in normfluodbf 1.5.2.
 - This update was significantly bigger than expected and should have
   been a major update but by definition when backward compatibility is
   maintained with the previous version, it should be considered a minor
@@ -182,7 +191,7 @@ normalized_datazt <- normfluordbf(liposomes_214, norm_scale = 'z-score', transfo
 ``` r
 library(normfluodbf)
 dat1 <- system.file("extdata", "dat_1.dat", package = "normfluodbf")
-normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40)
+normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40, rows_used = c('A','B','C'))
 ```
 
 ### Base Function
@@ -193,7 +202,7 @@ normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40)
 ``` r
 library(normfluodbf)
 dat2 <- system.file("extdata", "dat_2.dat", package = "normfluodbf")
-normalized_data <- normfluordat(dat2, tnp = 3, cycles = 40)
+normalized_data <- normfluordat(dat2, tnp = 3, cycles = 40, rows_used = c('A','B','C'))
 ```
 
 - Please note that the examples above indicate the simplest scenarios as
@@ -206,18 +215,23 @@ normalized_data <- normfluordat(dat2, tnp = 3, cycles = 40)
 
 #### Using The rows_used parameter
 
-- This parameter is used alone when the user loaded samples from column
-  1 and in sequence.
+- This parameter is used alone and the user need not worry about
+  providing the columns used.
 - The default read direction is vertical.
-- If the cols_used parameter is not provided, the program will assume
-  the user loaded from column 1 and did so in sequence. Attribute names
-  will be added to the final data frame based on this assumption.
+- The program has a robust algorithm or recipe for determining attribute
+  names based on the rows used.
+- Users are strongly encouraged to provide the rows_used parameter.
 
 ``` r
 library(normfluodbf)
 dat2 <- system.file("extdata", "dat_2.dat", package = "normfluodbf")
-n <- c('A','B','C')
-normalized_data16 <- normfluodat(dat2, tnp = 3, cycles = 40, n)
+n <- c('A','B','C') #rows used
+
+# Cycle_Number attribute is included below
+normalized_data <- normfluodat(dat2, tnp = 3, cycles = 40, n)
+
+# Cycle_Number & Time attributes are included below
+normalized_data <- normfluodat(dat2, tnp = 3, cycles = 40, n, interval = 30)
 ```
 
 - Pay attention to the illustrations below. The setup below represents a
@@ -251,11 +265,15 @@ normalized_data16 <- normfluodat(dat2, tnp = 3, cycles = 40, n)
 
 #### Using The rows_used and cols_used parameter
 
-- The cols_used parameter is only used when the rows_used parameter is
-  used.
-- The cols_used parameter is especially relevant when the user DOES NOT
-  load samples from column 1.
+- The cols_used parameter is only used if the user suspects some
+  inconsistencies in their experimental procedure. Otherwise, the user
+  should let the program determine the columns used.
+- The cols_used parameter is especially relevant when the user loads
+  samples in an unorthodox way.
 - The default read direction is vertical as indicated earlier.
+- Users are advised NOT to supply the cols_used because the program has
+  a robust algorithm for determining the cols_used. The users’ input
+  will override the inbuilt algorithm for determining columns used.
 
 ``` r
 library(normfluodbf)
@@ -303,9 +321,9 @@ normalized_data <- normfluodat(dat2, tnp = 3, cycles = 40, user_specific_labels 
 
 | Sample_Type (TNP) | 96  | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  |
 |:------------------|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|
-| Test              | A   | X1  |     | X3  | X4  |     |     |     |     |     |     |     |     |
-| Negative          | B   |     |     |     |     |     |     |     |     |     |     |     |     |
-| Positive          | C   | X25 |     |     | X28 | X29 |     |     |     |     |     |     |     |
+| Test              | A   | X1  | X4  | X3  |     |     |     |     |     |     |     |     |     |
+| Negative          | B   | X2  | X29 |     |     |     |     |     |     |     |     |     |     |
+| Positive          | C   | X25 |     | X28 |     |     |     |     |     |     |     |     |     |
 |                   | D   |     |     |     |     |     |     |     |     |     |     |     |     |
 |                   | E   |     |     |     |     |     |     |     |     |     |     |     |     |
 |                   | F   |     |     |     |     |     |     |     |     |     |     |     |     |
@@ -414,7 +432,7 @@ normalized_data <- normfluodat(dat2, tnp = 3, cycles = 40, n, read_direction = '
 | A1          | B1          | C1          | …39      |
 | A1          | B1          | C1          | …40      |
 
-- Below is just a quick illustration of the non-standard setup. This
+- Above is just a quick illustration of the non-standard setup. This
   setup does not change anything about the algorithms but simply
   showcases how naming conventions will reverse if the experimenter
   deviates from the commonly used path.
@@ -424,13 +442,17 @@ normalized_data <- normfluodat(dat2, tnp = 3, cycles = 40, n, read_direction = '
 - As indicated earlier, the code chunk below is the simplest use case
   for this function.
 - AHOI, the user gets a data frame with the samples perfectly separated
-  but with NO attribute names.
+  and WITH attribute names.
 - Very important to mention this point twice.
 
 ``` r
 library(normfluodbf)
 dat1 <- system.file("extdata", "dat_1.dat", package = "normfluodbf")
-normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40)
+
+normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40, rows_used = c('A','B','C') )
+
+# Use the syntax below to obtain a Time attribute as well
+normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40, rows_used = c('A','B','C'), interval = 30)
 ```
 
 ## 🛂 Quality Control (QC)

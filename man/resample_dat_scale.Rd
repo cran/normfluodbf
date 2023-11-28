@@ -24,7 +24,7 @@ This function builds on or scales-up  @seealso \code{\link[=resample_dat]{resamp
 This function is less optimized than @seealso \code{\link[=resample_dat_scale_optimus]{resample_dat_scale_optimus()}}.
 }
 \examples{
-fpath <- system.file("extdata", "dat_1.dat", package = "normfluodbf", mustWork = TRUE)
+fpath <- system.file("extdata", "dat_4.dat", package = "normfluodbf", mustWork = TRUE)
 dat_df <- read.table(file=fpath)
 nocomma_dat <- clean_odddat_optimus(dat_df)
 resampled_scaled <- resample_dat_scale(nocomma_dat, tnp=3, cycles=40)
