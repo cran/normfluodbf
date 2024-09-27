@@ -1,43 +1,23 @@
 Tingwei Adeck
-November 26, 2023
+September 27, 2024
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# [![](https://img.shields.io/badge/normfluodbf-1.5.2-blue.svg)](https://github.com/AlphaPrime7/normfluodbf) <img src="man/figures/logo.png" align="right" width="180"/>
+# Normfluodbf
 
-[![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com/AlphaPrime7/normfluodbf)
-[![Demandez moi n’importe quoi
-!](https://img.shields.io/badge/Demandez%20moi-n'%20importe%20quoi-1abc9c.svg)](mailto:awesome.tingwei@outlook.com)
-[![Ask Me Anything
-!](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](mailto:awesome.tingwei@outlook.com)
-[![made-with-R](https://img.shields.io/badge/Made%20with-Rstudio-1f425f.svg)](https://www.rstudio.com/categories/rstudio-ide/)
-[![Project
-status](https://www.repostatus.org/badges/latest/concept.svg)](https://github.com/AlphaPrime7/normfluodbf/commits)
-[![Project
-Status](https://www.repostatus.org/badges/latest/active.svg)](https://github.com/AlphaPrime7/normfluodbf/commits)
-[![Project
-Status](https://img.shields.io/badge/repo%20status-mature-fg79b4.svg)](https://github.com/AlphaPrime7/normfluodbf_ShinyApp/graphs/contributors)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![license](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://opensource.org/license/MIT)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=for-the-badge)](https://github.com/AlphaPrime7/normfluodbf/graphs/commit-activity)
 [![PRs
-Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
-[![saythanks](https://img.shields.io/badge/say-thanks-ff69b4.svg)](https://github.com/AlphaPrime7/normfluodbf)
-[![THANK
-YOU](https://img.shields.io/badge/THANK-YOU-ff69b4.svg)](mailto:awesome.tingwei@outlook.com)
-[![test-coverage](https://github.com/AlphaPrime7/normfluodbf/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/AlphaPrime7/normfluodbf/actions/workflows/test-coverage.yaml)
-[![R-CMD-check](https://github.com/AlphaPrime7/normfluodbf/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AlphaPrime7/normfluodbf/actions/workflows/R-CMD-check.yaml)
-[![pages-build-deployment](https://github.com/AlphaPrime7/normfluodbf/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/AlphaPrime7/normfluodbf/actions/workflows/pages/pages-build-deployment)
-[![license](https://img.shields.io/badge/MIT-License?label=license)](https://mit-license.org/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/AlphaPrime7/normfluodbf/graphs/commit-activity)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/normfluodbf)](https://CRAN.R-project.org/package=normfluodbf)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/normfluodbf?color=yellow)](https://cran.r-project.org/package=normfluodbf)
-[![](http://cranlogs.r-pkg.org/badges/last-month/normfluodbf?color=green)](https://cran.r-project.org/package=normfluodbf)
-[![](http://cranlogs.r-pkg.org/badges/last-week/normfluodbf?color=yellow)](https://cran.r-project.org/package=normfluodbf)
-[![Awesome
-Badges](https://img.shields.io/badge/badges-awesome-green.svg)](https://github.com/Naereen/badges)
+Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](https://github.com/AlphaPrime7/normfluodbf)
+[![Codecov](https://img.shields.io/badge/Codecov-F01F7A?style=for-the-badge&logo=Codecov&logoColor=white)](https://app.codecov.io/gh/AlphaPrime7/normfluodbf?branch=main)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg?style=for-the-badge)](https://lifecycle.r-lib.org/articles/stages.html)
+[![Demandez moi n’importe
+quoi!](https://img.shields.io/badge/Demandez%20moi-n'%20importe%20quoi-1abc9c.svg?style=for-the-badge)](mailto:awesome.tingwei@outlook.com)
+[![saythanks](https://img.shields.io/badge/say-thanks-fff000.svg?style=for-the-badge)](https://github.com/AlphaPrime7/normfluodbf)
+[![Orcid](https://img.shields.io/badge/orcid-A6CE39?style=for-the-badge&logo=orcid&logoColor=white)](https://orcid.org/0009-0009-7450-8863)
+[![Linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tingwei-adeck)
 
-[![](https://img.shields.io/badge/follow%20me%20on-LinkedIn-green.svg)](https://www.linkedin.com/in/tingwei-adeck)
-[![](https://img.shields.io/badge/follow%20me%20on-GitHub-green.svg)](https://github.com/AlphaPrime7)
+<a href="https://buymeacoffee.com/tingweiadeck"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a Pizza&amp;emoji=🍕&amp;slug=tingweiadeck&amp;button_colour=FFA500&amp;font_colour=000000&amp;font_family=Cookie&amp;outline_colour=000000&amp;coffee_colour=ffffff" width="100" height="50"/></a>
 
 # ⏩ 📽️ Quick start
 
@@ -47,11 +27,44 @@ for an illustration on how to effectively use the package. The video
 tutorial only covers DAT files based on the assumption that MOST users
 will be interested in using the package for DAT files.
 
+## 🆕 Updates
+
+Based on work by [Dean Attali](https://github.com/daattali), I have
+added functionalities for a plate like setup that ensures that R users
+have a better experience dealing with Liposome flux assay data sets.
+Adding the plate system ensures that R users can get plots similar to
+that seen on the Microplate reader. I can go on forever on the
+advantages of adding the plate system but R users will have to use it
+and find out the benefits for themselves.
+
+[Dean Attali’s](https://github.com/daattali)
+[ddpcr](https://github.com/daattali/ddpcr/tree/master) provides an
+excellent implementation of the plate system but in the context of
+Digital Droplet Polymerase Chain Reactions (Ddpcr); I extend Dean’s work
+into Normfluodbf in the context of Liposome Flux Assays. I include
+advanced plotting functions in this update to ensure that scientists can
+perform science and let worries of data analysis to Normfluodbf. I hope
+that has been achieved in this update and hope to be even better in
+subsequent updates.
+
+In regards to plate systems, future updates might involve a change to
+the plate system in this package in order to achieve a more universal
+plate system that can be used to make plates that work with Dean’s
+[ddpcr](https://github.com/daattali/ddpcr/tree/master) experiments and
+other experiments that utilize plates.
+
+Caveat: The shiny app that was initially developed will be added to this
+package post-publication of the update. Due to unforeseen circumstances
+and because I have been working on real work, there has not been enough
+time to add the simple non-styled app that was developed for this
+package in my rookie days. Shiny app functions will not yield a useful
+shiny App. COMING SOON…
+
 # ✍️ Introduction
 
 [`{normfluodbf}`](https://github.com/AlphaPrime7/normfluodbf) is used to
 clean and normalize DBF and DAT files obtained from liposome flux assay
-experiments performed with the FLUOstar microplate reader. The
+(LFA) experiments performed with the FLUOstar microplate reader. The
 expectation is this package is not limited to this assay type but other
 assay types performed with the same instrument. The final data frames
 obtained from this package are ready for insightful data analysis and
@@ -63,8 +76,6 @@ public dissemination were driven by the book “What Mad Pursuit” by
 Francis Crick. Visit
 [`{my page}`](https://alphaprime7.github.io/normfluodbf/articles/normfluodbf.html)
 for details on the concept behind the project.
-
-<img src="man/figures/navab.png" align="center" width="540"/>
 
 # ⏬ Installation
 
@@ -191,7 +202,7 @@ normalized_datazt <- normfluordbf(liposomes_214, norm_scale = 'z-score', transfo
 ``` r
 library(normfluodbf)
 dat1 <- system.file("extdata", "dat_1.dat", package = "normfluodbf")
-normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40, rows_used = c('A','B','C'))
+normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40, rows_used = c('A','B','C'), interval = 30)
 ```
 
 ### Base Function
@@ -455,6 +466,32 @@ normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40, rows_used = c('A','B'
 normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40, rows_used = c('A','B','C'), interval = 30)
 ```
 
+## ✨ Updates
+
+``` r
+#simple pipeline run
+lipsum_214 <- system.file("extdata", "dat_1.dat", package = "normfluodbf")
+   plate = setup_plate(init_plate())
+   plate <- plate %>%
+     upload_data(file = lipsum_214, tnp = 3, cycles = 40, rows_used = c('A','B','C'), norm_scale = 'raw') %>%
+     run_steps
+
+#subset and plot
+lipsum_214 <- system.file("extdata", "dat_1.dat", package = "normfluodbf")
+plate = setup_plate(init_plate())
+plate <- plate %>%
+  upload_data(file = lipsum_214, tnp = 3, cycles = 40, rows_used = c('A','B','C'), norm_scale = 'raw') %>%
+  run_steps %>% subset('A1,B1,C1,C9') %>%
+  plot(whichplot = 2, legend_labels = c('beef_jerky','fatnose','yourmamasofat','youweird'))
+
+#plot plate layout- my favorite
+lipsum_214 <- system.file("extdata", "dat_1.dat", package = "normfluodbf")
+plate = setup_plate(init_plate())
+plate <- plate %>%
+  upload_data(file = lipsum_214, tnp = 3, cycles = 40, rows_used = c('A','B','C'), norm_scale = 'raw') %>%
+  run_steps %>% subset_for_layout(c('A1', 'B1', 'C1','A2','B2','C2','A3','B3','C3','C12','C9')) %>% plot(whichplot = 3)
+```
+
 ## 🛂 Quality Control (QC)
 
 - Experimental issues should be investigated at very high or very low
@@ -524,7 +561,8 @@ normalized_data <- normfluodat(dat1, tnp = 3, cycles = 40, rows_used = c('A','B'
 (R Core Team 2022) (Wickham, Chang, et al. 2023) (Arnold 2021) (Wickham
 2022) (Müller and Wickham 2023) (Wickham, Vaughan, and Girlich 2023)
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
 
 <div id="ref-R-ggthemes" class="csl-entry">
 
