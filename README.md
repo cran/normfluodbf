@@ -1,16 +1,16 @@
 Tingwei Adeck
-September 27, 2024
+September 09, 2025
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Normfluodbf
+# Normfluodbf 2.0.0
 
 [![license](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://opensource.org/license/MIT)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=for-the-badge)](https://github.com/AlphaPrime7/normfluodbf/graphs/commit-activity)
 [![PRs
-Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](https://github.com/AlphaPrime7/normfluodbf)
+Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](https://github.com/AlphaPrime7/normfluodbf/pulls)
 [![Codecov](https://img.shields.io/badge/Codecov-F01F7A?style=for-the-badge&logo=Codecov&logoColor=white)](https://app.codecov.io/gh/AlphaPrime7/normfluodbf?branch=main)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg?style=for-the-badge)](https://lifecycle.r-lib.org/articles/stages.html)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-orange.svg?style=for-the-badge)](https://lifecycle.r-lib.org/articles/stages.html)
 [![Demandez moi n’importe
 quoi!](https://img.shields.io/badge/Demandez%20moi-n'%20importe%20quoi-1abc9c.svg?style=for-the-badge)](mailto:awesome.tingwei@outlook.com)
 [![saythanks](https://img.shields.io/badge/say-thanks-fff000.svg?style=for-the-badge)](https://github.com/AlphaPrime7/normfluodbf)
@@ -529,7 +529,7 @@ plate <- plate %>%
   “Cycle_No” but seemed to have been mislabeled due to the tedious
   nature of my previous coding approach.
 
-<img src="man/figures/noise20.png" align="center" width="400"/>
+<img src="man/figures/qc_demo-1.png" width="100%" />
 
 ## 💻 Visualization
 
@@ -541,7 +541,7 @@ plate <- plate %>%
   done with base R and the images represent the results obtained when
   experiments are conducted within the signal region.
 
-<img src="man/figures/tnp3.png" align="center" width="400"/>
+<img src="man/figures/visualization_demo-1.png" width="100%" />
 
 ## 🎇 Epilogue
 

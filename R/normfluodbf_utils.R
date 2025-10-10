@@ -226,6 +226,127 @@ time_attribute = function(interval= NULL, first_end = NULL, pause_duration=NULL,
   }
 }
 
+#' A function to get the actual rows used in the assay.
+#' @description
+#' A function that facilitates a users' workflow by helping extract the actual rows used in the assay.
+#' @author Tingwei Adeck
+#' @param dat A string ("dat_1.dat") if the file is found within the present working directory (pwd) OR a path pointing directly to a ".dat" file.
+#' @return Returns a character vector denoting the rows used in the assay.
+#' @export
+#' @examples \dontrun{
+#' fpath <- system.file("extdata", "dat_1.dat", package = "normfluodbf", mustWork = TRUE)
+#' arutest <- actual_rows_used(fpath)}
+#' @rdname normfluodbf_utils
+actual_rows_used <- function(dat){
+  if (is.data.frame(dat)) {
+    df <- dat
+  }
+  else if (is.character(dat) && file.exists(dat)) {
+    df <- tryCatch(
+      {
+        utils::read.table(dat)
+      },
+      error = function(e) {
+        stop("Error reading the file. Please check the file path and format.")
+      }
+    )
+  }
+  else if (is.matrix(dat)) {
+    df <- as.data.frame(dat)
+  }
+  else {
+    stop("Input 'dat' must be a data frame, a valid file path, or a matrix.")
+  }
+
+  H_position <- which(LETTERS == "H")
+  length_A_to_H <- H_position
+
+  df <- head(df, length_A_to_H)
+  rows_without_all_dashes <- which(!apply(df, 1, function(row) all(row %in% c('-,', '-'))))
+  row_letters <- LETTERS[rows_without_all_dashes]
+  return(row_letters)
+}
+
+#' A function to get the number of rows used.
+#' @description
+#' A function that facilitates a users' workflow by helping to get the number of rows used in the assay.
+#' @author Tingwei Adeck
+#' @param dat A string ("dat_1.dat") if the file is found within the present working directory (pwd) OR a path pointing directly to a ".dat" file.
+#' @return Returns the number of rows used denoted as tnp.
+#' @export
+#' @examples \dontrun{
+#' fpath <- system.file("extdata", "dat_1.dat", package = "normfluodbf", mustWork = TRUE)
+#' gettnptest <- get_tnp(fpath)}
+#' @rdname normfluodbf_utils
+get_tnp <- function(dat){
+  if (is.data.frame(dat)) {
+    df <- dat
+  }
+  else if (is.character(dat) && file.exists(dat)) {
+    df <- tryCatch(
+      {
+        utils::read.table(dat)
+      },
+      error = function(e) {
+        stop("Error reading the file. Please check the file path and format.")
+      }
+    )
+  }
+  else if (is.matrix(dat)) {
+    df <- as.data.frame(dat)
+  }
+  else {
+    stop("Input 'dat' must be a data frame, a valid file path, or a matrix.")
+  }
+
+  H_position <- which(LETTERS == "H")
+  length_A_to_H <- H_position
+
+  df <- head(df, length_A_to_H)
+  rows_without_all_dashes <- which(!apply(df, 1, function(row) all(row %in% c('-,', '-'))))
+  row_letters <- LETTERS[rows_without_all_dashes]
+  return(length(row_letters))
+}
+
+#' A function to get the cycles.
+#' @description
+#' A function to get the number of cycles used in the assay.
+#' @author Tingwei Adeck
+#' @param dat A string ("dat_1.dat") if the file is found within the present working directory (pwd) OR a path pointing directly to a ".dat" file.
+#' @return The number of cycles.
+#' @export
+#' @examples \dontrun{
+#' fpath <- system.file("extdata", "dat_1.dat", package = "normfluodbf", mustWork = TRUE)
+#' getcyclestest <- actual_cycles(fpath)}
+#' @rdname normfluodbf_utils
+actual_cycles <- function(dat){
+  if (is.data.frame(dat)) {
+    df <- dat
+  }
+  else if (is.character(dat) && file.exists(dat)) {
+    df <- tryCatch(
+      {
+        utils::read.table(dat)
+      },
+      error = function(e) {
+        stop("Error reading the file. Please check the file path and format.")
+      }
+    )
+  }
+  else if (is.matrix(dat)) {
+    df <- as.data.frame(dat)
+  }
+  else {
+    stop("Input 'dat' must be a data frame, a valid file path, or a matrix.")
+  }
+
+  H_position <- which(LETTERS == "H")
+  length_A_to_H <- H_position
+  number_of_cycles <- nrow(df) / length_A_to_H
+
+  return(number_of_cycles)
+}
+
 #' A function to get the actual columns used in the assay.
 #' @description
 #' A function that facilitates a users' workflow by helping extract the actual columns used in the assay.
@@ -238,13 +359,37 @@ time_attribute = function(interval= NULL, first_end = NULL, pause_duration=NULL,
 #' acutest <- actual_cols_used(fpath)}
 #' @rdname normfluodbf_utils
 actual_cols_used <- function(dat){
-  df <- utils::read.table(dat)
+  if (is.data.frame(dat)) {
+    df <- dat
+  }
+  else if (is.character(dat) && file.exists(dat)) {
+    df <- tryCatch(
+      {
+        utils::read.table(dat)
+      },
+      error = function(e) {
+        stop("Error reading the file. Please check the file path and format.")
+      }
+    )
+  }
+  else if (is.matrix(dat)) {
+    df <- as.data.frame(dat)
+  }
+  else {
+    stop("Input 'dat' must be a data frame, a valid file path, or a matrix.")
+  }
+
   df <- clean_odddat_optimus(df)
-  colnames(df) <- c(1:ncol(df))
-  acu <- names(which(colSums(!is.na(df)) > 0))
-  acu <- as.numeric(as.vector(acu))
+  df <- df[ , !names(df) %in% c("Time", "Cycle_Number")]
+  df <- as.data.frame(df)
+
+  #colnames(df) <- c(1:ncol(df))
+  #acu <- names(which(colSums(!is.na(df)) > 0))
+  acu <- ncol(df)
+  acu <- as.numeric(as.vector(seq(acu)))
   return(acu)
 }
+
 
 #' A fluorescence quantification Quality Control (QC) function.
 #' @family normfluodbf_utils
@@ -317,8 +462,41 @@ fix_threshold_output <- function(outlier_wells){
       }
     }
   outlier_wells <- unique(outlier_wells)
-  print("Outlier wells (Mixtures might be problematic and should be investigated with mixtools)")
-  print(outlier_wells)
+  message("Outlier wells (Mixtures might be problematic and should be investigated with mixtools)")
+  message(outlier_wells)
+  return(fix_threshold_output(outlier_wells))
+}
+
+#' @rdname fluorthresholdcheck
+#' @return outlier wells list
+#' @export
+fluor_threshold_check_new <- function(clean_df, fun = NA){
+  load.emojifont(font = "EmojiOne.ttf")
+
+  outlier_wells <- c()
+
+  for(i in 1:nrow(clean_df)){
+    for(j in 1:ncol(clean_df)){
+      value <- clean_df[i, j]
+      if (!is.na(value)) {
+        if (value >= 2^15 || value <= 2^11) {
+          outlier_wells <- c(outlier_wells, names(clean_df)[j])
+        }
+      }
+    }
+  }
+
+  outlier_wells <- unique(outlier_wells)
+
+  if (length(outlier_wells) > 0) {
+    message(paste("Crikee, some values in your original data violate thresholds", emoji('pig'), emoji('camel')))
+    message("Outlier wells (Mixtures might be problematic and should be investigated with mixtools):")
+    message(paste(outlier_wells, collapse = ", "))
+  } else {
+    message(paste("Our quality control checks don't appear to show any wells that violate threshold values",
+                  emoji('heartbeat'), emoji('cool'), emoji('sunny'), emoji('sweat_smile')))
+  }
+
   return(fix_threshold_output(outlier_wells))
 }
 
@@ -335,17 +513,22 @@ fluor_threshold_check <- function(clean_df, fun = NA){
 
   for(i in 1:nrow(clean_df)){
     for(j in 1:ncol(clean_df)){
-      if ( clean_df[i,j] >= (2^15) && is.na(clean_df[i,j]) != nofun ){
-        outlier_wells <- c(outlier_wells, names(clean_df)[j])
-      } else if ( clean_df[i,j] <= (2^11) && is.na(clean_df[i,j]) != nofun ){
-        outlier_wells <- c(outlier_wells, names(clean_df)[j])
+      if ( (clean_df[i,j] >= (2^15) || clean_df[i,j] <= (2^11)) && is.na(clean_df[i,j]) != nofun ){
+        outlier_wells <- c(outlier_wells, unique(names(clean_df)[j]) )
       }
     }
   }
   outlier_wells <- unique(outlier_wells)
-  message(paste("Crikee, some values in your original data violate thresholds", emoji('pig'), emoji('camel')))
-  print("Outlier wells (Mixtures might be problematic and should be investigated with mixtools)")
-  print(outlier_wells)
+
+  if (length(outlier_wells) > 0 ) {
+    message(paste("Crikee, some values in your original data violate thresholds", emoji('pig'), emoji('camel')))
+    message("Outlier wells (Mixtures might be problematic and should be investigated with mixtools)")
+    message(paste(outlier_wells, collapse = ", "))
+  }
+  else {
+    message(paste("Our quality control checks dont appear to show any wells that violate threshold values", emoji('heartbeat'), emoji('cool'), emoji('sunny'), emoji('sweat_smile')) )
+  }
+
   return(fix_threshold_output(outlier_wells))
 }
 

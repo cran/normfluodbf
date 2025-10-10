@@ -39,7 +39,26 @@ normfluordat <- function(dat,
                          read_direction = NULL,
                          na_omit = NULL){
 
-  df <- utils::read.table(dat)
+  if (is.data.frame(dat)) {
+    df <- dat
+  }
+  else if (is.character(dat) && file.exists(dat)) {
+    df <- tryCatch(
+      {
+        utils::read.table(dat)
+      },
+      error = function(e) {
+        stop("Error reading the file. Please check the file path and format.")
+      }
+    )
+  }
+  else if (is.matrix(dat)) {
+    df <- as.data.frame(dat)
+  }
+  else {
+    stop("Input 'dat' must be a data frame, a valid file path, or a matrix.")
+  }
+  #df <- utils::read.table(dat)
   df <- clean_odddat_optimus(df)
 
   usl = user_specific_labels
@@ -186,7 +205,7 @@ normfluordat <- function(dat,
 #' The program takes these three baseline parameters, performs cleaning and normalization of the DAT file,
 #' and then appends an attribute called “Cycle_Number” to the normalized data frame.
 #' @author Tingwei Adeck
-#' @param dat A string ("dat_1.dat") if the file is found within the present working directory (pwd) OR a path pointing directly to a ".dat" file.
+#' @param dat A string ("dat_1.dat") if the file is found within the present working directory (pwd) OR a path pointing directly to a ".dat" file. Also this can be the dirty data frame derived from reading in the dat file.
 #' @param tnp A numeric value indicating the number of rows used. TNP is used as an acronym for Test, Negative, Positive.
 #' @param cycles A numeric value indicating the number of cycles selected by the user when running the FLUOstar instrument.
 #' @param rows_used A character vector of the rows used; ru = c('A','B','C').
@@ -214,15 +233,66 @@ normfluordat <- function(dat,
 #' fpath <- system.file("extdata", "dat_4.dat", package = "normfluodbf", mustWork = TRUE)
 #' normalized_fluo_dat <- normfluodat(dat=fpath, tnp = 3, cycles = 40)}
 #' @rdname normalize_liposome_fluor_dats
-normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, user_specific_labels = NULL, read_direction = NULL, norm_scale = NULL,
+normfluodat <- function(dat, tnp = NULL , cycles = NULL, rows_used = NULL, cols_used= NULL, user_specific_labels = NULL, read_direction = NULL, norm_scale = NULL,
                         interval= NULL, first_end = NULL, pause_duration=NULL, end_time=NULL, normfluodbf.verbose = TRUE){
 
-  df <- utils::read.table(dat)
-  df <- clean_odddat_optimus(df)
+  if (is.data.frame(dat)) {
+    df <- dat
+  }
+  else if (is.character(dat) && file.exists(dat)) {
+    df <- tryCatch(
+      {
+        utils::read.table(dat)
+      },
+      error = function(e) {
+        stop("Error reading the file. Please check the file path and format.")
+      }
+    )
+  }
+  else if (is.matrix(dat)) {
+    df <- as.data.frame(dat)
+  }
+  else {
+    stop("Input 'dat' must be a data frame, a valid file path, or a matrix.")
+  }
 
-  dat = dat
+  if (is.null(tnp)) {
+    tnp <- get_tnp(dat)
+  }
+  else {
+    tnp <- tnp
+  }
+
+  if (is.null(cycles)) {
+    cycles <- actual_cycles(dat)
+  }
+  else {
+    cycles <- cycles
+  }
+
+  if (is.null(rows_used)) {
+    rows_used <- actual_rows_used(dat)
+  }
+  else {
+    rows_used <- rows_used
+  }
+
+  if (is.null(cols_used)) {
+    cols_used <- actual_cols_used(dat)
+  }
+  else {
+    cols_used <- cols_used
+  }
+
+  #df <- utils::read.table(dat)
+  df <- clean_odddat_optimus(df)
   ru = rows_used
-  usl = user_specific_labels
+  usl = user_specific_labels #the user can give the rowcol combination for the well
+
+  #print(rows_used)
+  #print(cols_used)
+  #print(cycles)
+  #print(tnp)
 
   #time attribute for OCD people
   interval = interval
@@ -232,8 +302,8 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
   cycles = cycles
 
   #Function revamp
-  if(is.null(dat) && is.null(tnp) && is.null(cycles)){
-    warning("please enter the DAT file path or string, tnp(# of rows) & cycles")
+  if(is.null(dat)){
+    warning("please enter the DAT file path or string")
 
   } else if(!is.null(dat) && !is.null(norm_scale) && norm_scale == 'raw'){
 
@@ -249,7 +319,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawv'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       #ran into mvp issues here i suppose
       df <- as.data.frame(df)
@@ -299,7 +369,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], as.numeric))
@@ -336,7 +406,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
     } else{
 
       df <- resample_dat_scale_optimus(df, tnp = tnp, cycles = cycles)
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       n <- 'na_dataframe'
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
@@ -376,7 +446,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawv'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], min_max_norm))
@@ -425,7 +495,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], min_max_norm))
@@ -463,7 +533,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
     } else{
 
       df <- resample_dat_scale_optimus(df, tnp = tnp, cycles = cycles)
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       n <- 'na_dataframe'
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
@@ -501,7 +571,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawv'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], min_max_norm_percent))
@@ -535,7 +605,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], min_max_norm_percent))
@@ -573,7 +643,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
 
     } else{
       df <- resample_dat_scale_optimus(df, tnp = tnp, cycles = cycles)
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       n <- 'na_dataframe'
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
@@ -610,7 +680,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawv'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], norm_z))
@@ -658,7 +728,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], norm_z))
@@ -696,7 +766,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
 
     } else{
       df <- resample_dat_scale_optimus(df, tnp = tnp, cycles = cycles)
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       n <- 'na_dataframe'
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
@@ -733,7 +803,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawv'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], decimal_scaling))
@@ -781,7 +851,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], decimal_scaling))
@@ -819,7 +889,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
 
     } else{
       df <- resample_dat_scale_optimus(df, tnp = tnp, cycles = cycles)
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       n <- 'na_dataframe'
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
@@ -906,7 +976,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], min_max_norm))
@@ -944,7 +1014,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
 
     } else{
       df <- resample_dat_scale_optimus(df, tnp = tnp, cycles = cycles)
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       n <- 'na_dataframe'
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
@@ -982,7 +1052,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawv'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], min_max_norm))
@@ -1031,7 +1101,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
       assign( paste0(n, '_rawh'), as.data.frame(df), envir = parent.frame())
 
       df <- df[ , colSums(is.na(df))==0]
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       df <- as.data.frame(df)
       df <- as.data.frame(lapply(df[1:ncol(df)], min_max_norm))
@@ -1069,7 +1139,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
 
     } else{
       df <- resample_dat_scale_optimus(df, tnp = tnp, cycles = cycles)
-      fluor_threshold_check(df)
+      if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), suppress_messages = TRUE) else fluor_threshold_check(df)
 
       n <- 'na_dataframe'
       assign( paste0(n, '_rawv'), as.data.frame(df), envir = parent.frame())
@@ -1096,7 +1166,7 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
 
   } else {
     df <- resample_dat_scale_optimus(df, tnp = tnp, cycles = cycles)
-    fluor_threshold_check(df)
+    if(isFALSE(normfluodbf.verbose)) quiet(fluor_threshold_check(df), all = TRUE)
 
     n <- 'na_dataframe'
     assign( paste0(n, '_rawv'), as.data.frame(df), envir = parent.frame())
@@ -1156,7 +1226,27 @@ normfluodat <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, use
 #' @rdname normalize_liposome_fluor_dats
 normfluodatlite <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, user_specific_labels = NULL, read_direction = NULL, norm_scale = NULL){
 
-  df <- utils::read.table(dat)
+  if (is.data.frame(dat)) {
+    df <- dat
+  }
+  else if (is.character(dat) && file.exists(dat)) {
+    df <- tryCatch(
+      {
+        utils::read.table(dat)
+      },
+      error = function(e) {
+        stop("Error reading the file. Please check the file path and format.")
+      }
+    )
+  }
+  else if (is.matrix(dat)) {
+    df <- as.data.frame(dat)
+  }
+  else {
+    stop("Input 'dat' must be a data frame, a valid file path, or a matrix.")
+  }
+
+  #df <- utils::read.table(dat)
   df <- clean_odddat_optimus(df)
 
   ru = rows_used
@@ -1778,7 +1868,27 @@ normfluodatlite <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL,
 #' @rdname normalize_liposome_fluor_dats
 normfluodatfull <- function(dat, tnp, cycles, rows_used = NULL, cols_used= NULL, user_specific_labels = NULL, read_direction = NULL, norm_scale = NULL, na_omit = NULL){
 
-  df <- utils::read.table(dat)
+  if (is.data.frame(dat)) {
+    df <- dat
+  }
+  else if (is.character(dat) && file.exists(dat)) {
+    df <- tryCatch(
+      {
+        utils::read.table(dat)
+      },
+      error = function(e) {
+        stop("Error reading the file. Please check the file path and format.")
+      }
+    )
+  }
+  else if (is.matrix(dat)) {
+    df <- as.data.frame(dat)
+  }
+  else {
+    stop("Input 'dat' must be a data frame, a valid file path, or a matrix.")
+  }
+
+  #df <- utils::read.table(dat)
   df <- clean_odddat_optimus(df)
   actual_cols_u <- actual_cols_used(dat)
 
